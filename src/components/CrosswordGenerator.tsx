@@ -19,43 +19,54 @@ export class CrosswordGenerator {
     this.genAI = new GoogleGenerativeAI(apiKey);
   }
 
-  async generatePuzzles(): Promise<CrosswordData[]> {
+  async generatePuzzles(gridSize: number = 5, difficulty: string = 'medium', puzzleCount: number = 2): Promise<CrosswordData[]> {
     const model = this.genAI.getGenerativeModel({
       model: "gemini-1.5-flash" // Updated to use a current model
     });
 
-    const prompt = `Create 2 different crossword puzzles. Each puzzle should be a 5x5 grid with proper crossword structure.
+    const difficultyInstructions = {
+      easy: "Use simple, common words (3-5 letters). Basic vocabulary that everyone knows.",
+      medium: "Use moderately challenging words (4-7 letters). Mix of common and slightly advanced vocabulary.",
+      hard: "Use challenging words (5-9 letters). Include some advanced vocabulary and proper nouns.",
+      expert: "Use very challenging words (6-12 letters). Advanced vocabulary, technical terms, and obscure words."
+    };
+
+    const prompt = `Create ${puzzleCount} different crossword puzzles. Each puzzle should be a ${gridSize}x${gridSize} grid with proper crossword structure.
+    
+    Difficulty Level: ${difficulty.toUpperCase()}
+    ${difficultyInstructions[difficulty as keyof typeof difficultyInstructions]}
     
     Rules:
-    - Words must interlock properly
-    - Use common English words (3-5 letters)
-    - Include black squares (isBlack: true) to separate words
-    - Number only the starting squares of words
+    - Words must interlock properly at intersecting letters
+    - Use black squares (isBlack: true) to separate words strategically
+    - Number only the starting squares of words (both across and down)
     - Each word should have at least 3 letters
-    - Ensure words intersect correctly
+    - Ensure intersecting letters match exactly
+    - Create a balanced, solvable puzzle
+    - For larger grids, include more interconnected words
     
-    Return ONLY a valid JSON array with exactly 2 puzzle objects. Each puzzle should have this exact format:
+    Return ONLY a valid JSON array with exactly ${puzzleCount} puzzle objects. Each puzzle should have this exact format:
     [
       {
         "grid": [
           [{"letter": "C", "number": 1, "isBlack": false}, {"letter": "A", "isBlack": false}, {"letter": "T", "isBlack": false}, {"letter": "", "isBlack": true}, {"letter": "D", "number": 2, "isBlack": false}],
           [{"letter": "A", "isBlack": false}, {"letter": "", "isBlack": true}, {"letter": "O", "isBlack": false}, {"letter": "", "isBlack": true}, {"letter": "O", "isBlack": false}],
-          [{"letter": "R", "number": 3, "isBlack": false}, {"letter": "U", "isBlack": false}, {"letter": "N", "isBlack": false}, {"letter": "", "isBlack": true}, {"letter": "G", "isBlack": false}],
-          [{"letter": "", "isBlack": true}, {"letter": "N", "isBlack": false}, {"letter": "", "isBlack": true}, {"letter": "", "isBlack": true}, {"letter": "", "isBlack": true}],
-          [{"letter": "S", "number": 4, "isBlack": false}, {"letter": "U", "isBlack": false}, {"letter": "N", "isBlack": false}, {"letter": "", "isBlack": true}, {"letter": "", "isBlack": true}]
+          ...
         ],
         "clues": {
-          "across": {"1": "Feline pet", "3": "Move quickly", "4": "Bright star"},
-          "down": {"1": "Vehicle", "2": "Canine pet"}
+          "across": {"1": "clue for 1 across", "3": "clue for 3 across"},
+          "down": {"1": "clue for 1 down", "2": "clue for 2 down"}
         }
       },
       ...
     ]
     
     Important: 
+    - Grid must be exactly ${gridSize}x${gridSize}
     - Use empty string "" for letter in black squares
     - Only add numbers to squares that start a word
-    - Make sure intersecting letters match
+    - Make sure intersecting letters match perfectly
+    - Clues should match the difficulty level
     - Return ONLY the JSON array, no additional text or markdown formatting.`;
 
     try {
@@ -73,13 +84,13 @@ export class CrosswordGenerator {
     } catch (error) {
       console.error('Error generating crossword puzzles:', error);
       
-      // Fallback: return a sample puzzle if API fails
-      return this.getSamplePuzzles();
+      // Fallback: return sample puzzles if API fails
+      return this.getSamplePuzzles(gridSize, puzzleCount);
     }
   }
 
-  private getSamplePuzzles(): CrosswordData[] {
-    return [
+  private getSamplePuzzles(gridSize: number = 5, puzzleCount: number = 2): CrosswordData[] {
+    const samplePuzzles: CrosswordData[] = [
       {
         grid: [
           [
@@ -181,5 +192,13 @@ export class CrosswordGenerator {
         }
       }
     ];
+
+    // Return the requested number of puzzles (cycling through if needed)
+    const result = [];
+    for (let i = 0; i < puzzleCount; i++) {
+      result.push(samplePuzzles[i % samplePuzzles.length]);
+    }
+    
+    return result;
   }
 }
