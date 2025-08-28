@@ -75,69 +75,67 @@
 
 .clues-container {
   width: 100%;
-  max-width: 900px;
+  max-width: 800px;
+  margin-top: 40px;
 }
 
 .clues-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .across-clues,
 .down-clues {
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 12px;
-  border: 2px solid #e0e0e0;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  background: none;
+  padding: 0;
+  border: none;
+  box-shadow: none;
 }
 
 .across-clues h3,
 .down-clues h3 {
-  margin: 0 0 25px 0;
-  font-size: 28px;
+  margin: 0 0 15px 0;
+  font-size: 24px;
   font-weight: 700;
   color: #000000;
-  text-align: center;
-  position: relative;
+  text-align: left;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   letter-spacing: -0.5px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #000000;
+  padding-bottom: 8px;
+  display: inline-block;
 }
 
-.across-clues h3::after,
-.down-clues h3::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background-color: #000000;
-  border-radius: 2px;
+.clues-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 8px;
 }
 
 .clue {
-  margin-bottom: 16px;
-  line-height: 1.6;
-  color: #333333;
-  font-size: 18px;
-  padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  margin-right: 30px;
+  margin-bottom: 0;
+  line-height: 1.4;
+  color: #000000;
+  font-size: 16px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  white-space: nowrap;
+  border: none;
+  padding: 0;
 }
 
 .clue:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
+  margin-right: 0;
 }
 
 .clue-number {
   font-weight: 700;
   color: #000000;
-  margin-right: 12px;
-  font-size: 20px;
+  margin-right: 6px;
+  font-size: 16px;
 }
 
 /* Responsive design */
@@ -163,28 +161,27 @@
   }
   
   .clues-section {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-  
-  .across-clues,
-  .down-clues {
-    padding: 25px;
+    gap: 20px;
   }
   
   .across-clues h3,
   .down-clues h3 {
-    font-size: 24px;
+    font-size: 20px;
+  }
+  
+  .clues-row {
+    flex-direction: column;
+    gap: 8px;
   }
   
   .clue {
-    font-size: 16px;
-  }
-  
-  .clue-number {
-    font-size: 18px;
+    font-size: 15px;
+    white-space: normal;
+    margin-right: 0;
+    margin-bottom: 4px;
   }
 }
+
 
 @media (max-width: 480px) {
   .crossword-container {
@@ -204,18 +201,12 @@
     font-size: 11px;
   }
   
-  .across-clues,
-  .down-clues {
-    padding: 20px;
-  }
-  
   .across-clues h3,
   .down-clues h3 {
-    font-size: 22px;
+    font-size: 18px;
   }
   
   .clue {
-    font-size: 15px;
-    padding: 10px 0;
+    font-size: 14px;
   }
 }

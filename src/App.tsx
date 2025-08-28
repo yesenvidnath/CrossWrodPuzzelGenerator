@@ -64,9 +64,9 @@ function App() {
         </div>
       )}
 
-      <div className="puzzles-container">
+      <div className="puzzles-grid">
         {puzzles.map((puzzle, index) => (
-          <div key={index} className="puzzle-wrapper">
+          <div key={index} className="puzzle-column">
             <h2>Puzzle {index + 1}</h2>
             <CrosswordPuzzle
               grid={puzzle.grid}

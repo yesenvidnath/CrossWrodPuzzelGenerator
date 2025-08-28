@@ -66,20 +66,24 @@ const CrosswordPuzzle: React.FC<CrosswordPuzzleProps> = ({ grid, clues }) => {
         <div className="clues-section">
           <div className="across-clues">
             <h3>Across</h3>
-            {Object.entries(clues.across).map(([number, clue]) => (
-              <div key={`across-${number}`} className="clue">
-                <span className="clue-number">{number}.</span> {clue}
-              </div>
-            ))}
+            <div className="clues-row">
+              {Object.entries(clues.across).map(([number, clue]) => (
+                <div key={`across-${number}`} className="clue">
+                  <span className="clue-number">{number}.</span>{clue}
+                </div>
+              ))}
+            </div>
           </div>
           
           <div className="down-clues">
             <h3>Down</h3>
-            {Object.entries(clues.down).map(([number, clue]) => (
-              <div key={`down-${number}`} className="clue">
-                <span className="clue-number">{number}.</span> {clue}
-              </div>
-            ))}
+            <div className="clues-row">
+              {Object.entries(clues.down).map(([number, clue]) => (
+                <div key={`down-${number}`} className="clue">
+                  <span className="clue-number">{number}.</span>{clue}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
